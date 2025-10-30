@@ -6,8 +6,8 @@ namespace Lightit\Authentication\Domain\Actions;
 
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Lightit\Authentication\Domain\DataTransferObjects\LoginDto;
-use Lightit\Backoffice\Users\Domain\Models\User;
 use Lightit\Shared\App\Exceptions\Http\UnauthorizedException;
+use Lightit\Users\Domain\Models\User;
 use PHPOpenSourceSaver\JWTAuth\Factory as JWTAuth;
 use PHPOpenSourceSaver\JWTAuth\JWTGuard;
 
