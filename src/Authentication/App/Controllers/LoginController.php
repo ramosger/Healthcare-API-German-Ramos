@@ -12,7 +12,7 @@ class LoginController
 {
     public function __invoke(LoginRequest $request, LoginAction $loginAction): JsonResponse
     {
-        $credentials = $request->only([$request::EMAIL, $request::PASSWORD]);
+        $credentials = $request->only([\Lightit\Authentication\App\Requests\LoginRequest::EMAIL, \Lightit\Authentication\App\Requests\LoginRequest::PASSWORD]);
 
         $loginDto = $loginAction->execute($credentials);
 
