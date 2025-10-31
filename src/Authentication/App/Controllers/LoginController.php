@@ -14,8 +14,8 @@ class LoginController
     {
         $credentials = $request->only(
             [
-                \Lightit\Authentication\App\Requests\LoginRequest::EMAIL,
-                \Lightit\Authentication\App\Requests\LoginRequest::PASSWORD,
+                LoginRequest::EMAIL,
+                LoginRequest::PASSWORD,
             ]
         );
 
