@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Support\Facades\Route;
 use Lightit\Users\App\Controllers\{GetUserController, DeleteUserController, ListUserController, StoreUserController, UpdateUserController};
-use Lightit\Doctors\App\Controllers\{GetDoctorController, ListDoctorController};
+use Lightit\Doctors\App\Controllers\{GetDoctorController, ListDoctorController, StoreDoctorController};
 
 /*
 |--------------------------------------------------------------------------
@@ -22,8 +22,8 @@ Route::middleware('auth:sanctum')
     ->get('/me', fn(
         #[CurrentUser] $user
     ) => response()->json([
-        'data' => $user,
-    ]));
+            'data' => $user,
+        ]));
 
 /*
 |--------------------------------------------------------------------------
@@ -55,4 +55,5 @@ Route::prefix('doctors')
         Route::get('/{doctor}', GetDoctorController::class)
             ->withTrashed()
             ->whereNumber('doctor');
+        Route::post('/', StoreDoctorController::class);
     });
