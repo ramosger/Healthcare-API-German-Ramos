@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lightit\Authentication\App\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class LoginRequest extends FormRequest
 {
@@ -15,7 +16,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            self::EMAIL => ['required', 'email:strict'],
+            self::EMAIL => ['required', Rule::email()->strict()],
             self::PASSWORD => ['required'],
         ];
     }
