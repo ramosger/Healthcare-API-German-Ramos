@@ -6,9 +6,9 @@ namespace Lightit\Doctors\App\Controllers;
 
 use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
+use Lightit\Doctors\App\Requests\UpsertDoctorRequest;
 use Lightit\Doctors\App\Resources\DoctorResource;
 use Lightit\Doctors\Domain\Actions\StoreDoctorAction;
-use Lightit\Doctors\App\Requests\UpsertDoctorRequest;
 
 #[Group('Doctors')]
 final readonly class StoreDoctorController

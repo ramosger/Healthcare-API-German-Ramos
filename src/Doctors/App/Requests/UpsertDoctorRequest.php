@@ -6,7 +6,6 @@ namespace Lightit\Doctors\App\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Lightit\Doctors\Domain\DataTransferObjects\DoctorDto;
-use Lightit\Doctors\Domain\Models\Doctor;
 
 class UpsertDoctorRequest extends FormRequest
 {
@@ -17,8 +16,7 @@ class UpsertDoctorRequest extends FormRequest
      */
     public function rules(): array
     {
-        /** @var Doctor|null $doctor */
-        $doctor = $this->route('doctor');
+        $this->route('doctor');
 
         return [
             self::NAME => ['required', 'string', 'min:4', 'max:80'],
