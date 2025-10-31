@@ -8,6 +8,7 @@ use Database\Factories\AppointmentFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Lightit\Doctors\Domain\Models\Doctor;
 use Lightit\Patients\Domain\Models\Patient;
 
 class Appointment extends Model
@@ -18,6 +19,17 @@ class Appointment extends Model
     protected static function newFactory(): Factory
     {
         return AppointmentFactory::new();
+    }
+
+    /**
+     * @return belongsTo<Doctor, Appointment>
+     */
+    public function doctor(): BelongsTo
+    {
+        /** @var belongsTo<Doctor, Appointment> $relation */
+        $relation = $this->belongsTo(Doctor::class);
+
+        return $relation;
     }
 
     /**
