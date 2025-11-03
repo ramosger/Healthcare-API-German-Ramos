@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Lightit\Users\App\Controllers\{GetUserController, DeleteUserController, ListUserController, StoreUserController, UpdateUserController};
 use Lightit\Doctors\App\Controllers\{GetDoctorController, ListDoctorController, StoreDoctorController, UpdateDoctorController, DeleteDoctorController, AssignClinicsToDoctorController};
 use Lightit\Clinics\App\Controllers\{GetClinicController, ListClinicController, StoreClinicController, UpdateClinicController, DeleteClinicController, AssignDoctorsToClinicController};
-use Lightit\Patients\App\Controllers\{GetPatientController, ListPatientController};
+use Lightit\Patients\App\Controllers\{GetPatientController, ListPatientController, StorePatientController};
 
 /*
 |--------------------------------------------------------------------------
@@ -95,4 +95,5 @@ Route::prefix('patients')->group(static function (): void {
     })->whereNumber('patient');
 
     Route::get('/', ListPatientController::class);
+    Route::post('/', StorePatientController::class);
 });
