@@ -23,35 +23,26 @@ class Appointment extends Model
     }
 
     /**
-     * @return belongsTo<Doctor, Appointment>
+     * @return BelongsTo<Doctor, $this>
      */
     public function doctor(): BelongsTo
     {
-        /** @var belongsTo<Doctor, Appointment> $relation */
-        $relation = $this->belongsTo(Doctor::class);
-
-        return $relation;
+        return $this->belongsTo(Doctor::class);
     }
 
     /**
-     * @return belongsTo<Patient, Appointment>
+     * @return BelongsTo<Patient, $this>
      */
     public function patient(): BelongsTo
     {
-        /** @var belongsTo<Patient, Appointment> $relation */
-        $relation = $this->belongsTo(Patient::class);
-
-        return $relation;
+        return $this->belongsTo(Patient::class);
     }
 
     /**
-     * @return belongsTo<Clinic, Appointment>
+     * @return BelongsTo<Clinic, $this>
      */
     public function clinic(): BelongsTo
     {
-        /** @var belongsTo<Clinic, Appointment> $relation */
-        $relation = $this->belongsTo(Clinic::class);
-
-        return $relation;
+        return $this->belongsTo(Clinic::class);
     }
 }
