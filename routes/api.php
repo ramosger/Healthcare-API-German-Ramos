@@ -6,7 +6,7 @@ use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Support\Facades\Route;
 use Lightit\Users\App\Controllers\{GetUserController, DeleteUserController, ListUserController, StoreUserController, UpdateUserController};
 use Lightit\Doctors\App\Controllers\{GetDoctorController, ListDoctorController, StoreDoctorController, UpdateDoctorController, DeleteDoctorController};
-use Lightit\Clinics\App\Controllers\{GetClinicController, ListClinicController, UpdateClinicController};
+use Lightit\Clinics\App\Controllers\{GetClinicController, ListClinicController, UpdateClinicController, DeleteClinicController};
 
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +72,7 @@ Route::prefix('clinics')->group(static function (): void {
     Route::prefix('{clinic}')->group(static function (): void {
         Route::get('/', GetClinicController::class)->withTrashed();
         Route::put('/', UpdateClinicController::class);
+        Route::delete('/', DeleteClinicController::class);
     })->whereNumber('clinic');
 
     Route::get('/', ListClinicController::class);
