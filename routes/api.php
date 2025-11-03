@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Illuminate\Container\Attributes\CurrentUser;
 use Illuminate\Support\Facades\Route;
 use Lightit\Users\App\Controllers\{GetUserController, DeleteUserController, ListUserController, StoreUserController, UpdateUserController};
-use Lightit\Doctors\App\Controllers\{GetDoctorController, ListDoctorController, StoreDoctorController};
+use Lightit\Doctors\App\Controllers\{GetDoctorController, ListDoctorController, StoreDoctorController, UpdateDoctorController};
 
 /*
 |--------------------------------------------------------------------------
@@ -56,4 +56,6 @@ Route::prefix('doctors')
             ->withTrashed()
             ->whereNumber('doctor');
         Route::post('/', StoreDoctorController::class);
+        Route::put('/{doctor}', UpdateDoctorController::class)
+            ->whereNumber('doctor');
     });
