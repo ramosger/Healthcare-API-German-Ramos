@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
+
 use Lightit\Appointments\Domain\Models\Appointment;
 
 /**
@@ -22,8 +23,8 @@ class AppointmentFactory extends Factory
      */
     public function definition(): array
     {
-        $start = Carbon::now();
-        $end   = (clone $start)->addMinutes(rand(30, 120));
+        $start = CarbonImmutable::now();
+        $end   = $start->addMinutes(rand(30, 120));
 
         return [
             'doctor_id' => DoctorFactory::new(),
