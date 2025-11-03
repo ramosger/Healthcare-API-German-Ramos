@@ -76,7 +76,7 @@ Route::prefix('clinics')->group(static function (): void {
         Route::put('/', UpdateClinicController::class);
         Route::delete('/', DeleteClinicController::class);
 
-        Route::put('/doctors', AssignDoctorsToClinicController::class)->whereNumber('clinic');
+        Route::put('/doctors', AssignDoctorsToClinicController::class);
     })->whereNumber('clinic');
 
     Route::get('/', ListClinicController::class);
