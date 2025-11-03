@@ -13,9 +13,9 @@ use Lightit\Clinics\Domain\Actions\StoreClinicAction;
 #[Group('Clinics')]
 final readonly class StoreClinicController
 {
-    public function __invoke(UpsertClinicRequest $request, StoreClinicAction $storeClinicAction): JsonResponse
+    public function __invoke(UpsertClinicRequest $request, StoreClinicAction $action): JsonResponse
     {
-        $clinic = $storeClinicAction->execute($request->toDto());
+        $clinic = $action->execute($request->toDto());
 
         return ClinicResource::make($clinic)
             ->response()

@@ -15,13 +15,13 @@ use Lightit\Clinics\Domain\Models\Clinic;
 final readonly class UpdateClinicController
 {
     public function __invoke(
-        Clinic $clinic,
+        Clinic $clinicToUpdate,
         UpsertClinicRequest $request,
-        UpdateClinicAction $updateClinicAction,
+        UpdateClinicAction $action,
     ): JsonResponse {
-        $clinic = $updateClinicAction->execute($clinic, $request->toDto());
+        $clinicUpdated = $action->execute($clinicToUpdate, $request->toDto());
 
-        return ClinicResource::make($clinic)
+        return ClinicResource::make($clinicUpdated)
             ->response();
     }
 }
