@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Lightit\Users\App\Controllers\GetCurrentUserController;
 use Illuminate\Support\Facades\Route;
 use Lightit\Users\App\Controllers\{GetUserController, DeleteUserController, ListUserController, StoreUserController, UpdateUserController};
-use Lightit\Doctors\App\Controllers\{GetDoctorController, ListDoctorController, StoreDoctorController, UpdateDoctorController, DeleteDoctorController};
+use Lightit\Doctors\App\Controllers\{GetDoctorController, ListDoctorController, StoreDoctorController, UpdateDoctorController, DeleteDoctorController, AssignClinicsToDoctorController};
 
 /*
 |--------------------------------------------------------------------------
@@ -45,15 +45,15 @@ Route::prefix('users')
 | Doctors Routes
 |--------------------------------------------------------------------------
 */
-Route::prefix('doctors')
-    ->group(static function (): void {
-        Route::get('/', ListDoctorController::class);
-        Route::get('/{doctor}', GetDoctorController::class)
-            ->withTrashed()
-            ->whereNumber('doctor');
-        Route::post('/', StoreDoctorController::class);
-        Route::put('/{doctor}', UpdateDoctorController::class)
-            ->whereNumber('doctor');
-        Route::delete('/{doctor}', DeleteDoctorController::class)
-            ->whereNumber('doctor');
-    });
+Route::prefix('doctors')->group(static function (): void {
+    Route::prefix('{doctor}')->group(static function (): void {
+        Route::get('/', GetDoctorController::class)->withTrashed();
+        Route::put('/', UpdateDoctorController::class);
+        Route::delete('/', DeleteDoctorController::class);
+
+        Route::put('/clinics', AssignClinicsToDoctorController::class);
+    })->whereNumber('doctor');
+
+    Route::get('/', ListDoctorController::class);
+    Route::post('/', StoreDoctorController::class);
+});
