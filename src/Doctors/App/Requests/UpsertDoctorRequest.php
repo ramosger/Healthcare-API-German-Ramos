@@ -12,12 +12,10 @@ class UpsertDoctorRequest extends FormRequest
     public const NAME = 'name';
 
     /**
-     * @return array<string, mixed>
+     * @return array<string, array<int, string>>
      */
     public function rules(): array
     {
-        $this->route('doctor');
-
         return [
             self::NAME => ['required', 'string', 'min:4', 'max:80'],
         ];

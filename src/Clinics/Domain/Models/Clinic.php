@@ -9,26 +9,25 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Lightit\Appointments\Domain\Models\Appointment;
 use Lightit\Doctors\Domain\Models\Doctor;
 
 class Clinic extends Model
 {
     /**
-     * @return ClinicFactory
-     */
-    protected static function newFactory(): Factory
-    {
-        return ClinicFactory::new();
-    }
-
-    /**
-     * @return BelongsToMany<Doctor, Clinic, Pivot, 'pivot'>
+     * @return BelongsToMany<Doctor, $this>
      */
     public function doctors(): BelongsToMany
     {
-        /** @var BelongsToMany<Doctor, Clinic, Pivot, 'pivot'> $relation */
-        $relation = $this->belongsToMany(Doctor::class);
+        return $this->belongsToMany(Doctor::class);
+    }
 
-        return $relation;
+    /**
+     * @return HasMany<Appointment, $this>
+     */
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(Appointment::class);
     }
 }
