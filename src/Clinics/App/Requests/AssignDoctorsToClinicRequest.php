@@ -20,7 +20,7 @@ final class AssignDoctorsToClinicRequest extends FormRequest
     {
         return [
             self::DOCTOR_IDS => ['required', 'array', 'min:1'],
-            self::DOCTOR_IDS . '.*' => ['integer', Rule::exists(Doctor::class)],
+            self::DOCTOR_IDS . '.*' => ['integer', Rule::exists(Doctor::class, 'id')],
         ];
     }
 
