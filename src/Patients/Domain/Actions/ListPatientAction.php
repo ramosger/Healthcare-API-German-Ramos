@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Lightit\Patients\Domain\Actions;
 
-use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Lightit\Patients\Domain\Models\Patient;
 
 class ListPatientAction
 {
     /**
-     * @return Collection<int, Patient>
+     * @return LengthAwarePaginator<int, Patient>
      */
-    public function execute(): Collection
+    public function execute(): LengthAwarePaginator
     {
         return Patient::query()
             ->orderBy('name')
-            ->get();
+            ->paginate(10);
     }
 }
