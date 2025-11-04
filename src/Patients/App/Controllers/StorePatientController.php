@@ -11,7 +11,7 @@ use Lightit\Patients\App\Resources\PatientResource;
 use Lightit\Patients\Domain\Actions\StorePatientAction;
 
 #[Group('Clinics')]
-final readonly class StorePatientController
+final class StorePatientController
 {
     public function __invoke(UpsertPatientRequest $request, StorePatientAction $action): JsonResponse
     {

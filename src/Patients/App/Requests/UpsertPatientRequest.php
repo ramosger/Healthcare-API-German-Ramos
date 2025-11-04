@@ -25,8 +25,8 @@ final class UpsertPatientRequest extends FormRequest
             self::EMAIL => [
                 'required',
                 'string',
-                'email:rfc,dns',
                 'max:90',
+                Rule::email()->strict(),
                 Rule::unique(User::class)->ignore($this->id),
             ],
         ];
