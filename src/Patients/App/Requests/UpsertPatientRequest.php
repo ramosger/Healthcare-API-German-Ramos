@@ -7,7 +7,7 @@ namespace Lightit\Patients\App\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Lightit\Patients\Domain\DataTransferObjects\PatientDto;
-use Lightit\Patients\Domain\Models\Patient;
+use Lightit\Users\Domain\Models\User;
 
 final class UpsertPatientRequest extends FormRequest
 {
@@ -27,7 +27,7 @@ final class UpsertPatientRequest extends FormRequest
                 'string',
                 'email:rfc,dns',
                 'max:90',
-                Rule::unique(Patient::class, 'email')->ignore($this->route('patient')),
+                Rule::unique(User::class)->ignore($this->id),
             ],
         ];
     }
