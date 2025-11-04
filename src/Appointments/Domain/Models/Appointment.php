@@ -13,7 +13,7 @@ use Lightit\Patients\Domain\Models\Patient;
 class Appointment extends Model
 {
     /**
-     * @return belongsTo<Doctor, $this>
+     * @return BelongsTo<Doctor, $this>
      */
     public function doctor(): BelongsTo
     {
@@ -21,7 +21,7 @@ class Appointment extends Model
     }
 
     /**
-     * @return belongsTo<Patient, $this>
+     * @return BelongsTo<Patient, $this>
      */
     public function patient(): BelongsTo
     {
@@ -29,7 +29,7 @@ class Appointment extends Model
     }
 
     /**
-     * @return belongsTo<Clinic, $this>
+     * @return BelongsTo<Clinic, $this>
      */
     public function clinic(): BelongsTo
     {
