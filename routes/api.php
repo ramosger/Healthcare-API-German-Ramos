@@ -8,7 +8,7 @@ use Lightit\Users\App\Controllers\{GetUserController, DeleteUserController, List
 use Lightit\Doctors\App\Controllers\{GetDoctorController, ListDoctorController, StoreDoctorController, UpdateDoctorController, DeleteDoctorController, AssignClinicsToDoctorController};
 use Lightit\Clinics\App\Controllers\{GetClinicController, ListClinicController, StoreClinicController, UpdateClinicController, DeleteClinicController, AssignDoctorsToClinicController};
 use Lightit\Patients\App\Controllers\{GetPatientController, ListPatientController, StorePatientController, UpdatePatientController, DeletePatientController};
-use Lightit\Appointments\App\Controllers\{StoreAppointmentController};
+use Lightit\Appointments\App\Controllers\{StoreAppointmentController, DeleteAppointmentController};
 
 /*
 |--------------------------------------------------------------------------
@@ -102,4 +102,7 @@ Route::prefix('patients')->group(static function (): void {
 */
 Route::prefix('appointments')->group(static function (): void {
     Route::post('/', StoreAppointmentController::class);
+
+    Route::delete('/{appointment}', DeleteAppointmentController::class)
+            ->whereNumber('appointment');
 });
