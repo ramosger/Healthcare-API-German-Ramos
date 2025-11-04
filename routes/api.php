@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Illuminate\Container\Attributes\CurrentUser;
+use Lightit\Users\App\Controllers\GetCurrentUserController;
 use Illuminate\Support\Facades\Route;
 use Lightit\Users\App\Controllers\{GetUserController, DeleteUserController, ListUserController, StoreUserController, UpdateUserController};
 use Lightit\Doctors\App\Controllers\{GetDoctorController, ListDoctorController, StoreDoctorController, UpdateDoctorController, DeleteDoctorController, AssignClinicsToDoctorController};
@@ -20,11 +20,7 @@ use Lightit\Clinics\App\Controllers\{GetClinicController, ListClinicController, 
 */
 
 Route::middleware('auth:sanctum')
-    ->get('/me', fn(
-        #[CurrentUser] $user
-    ) => response()->json([
-            'data' => $user,
-        ]));
+    ->get('/me', GetCurrentUserController::class);
 
 /*
 |--------------------------------------------------------------------------
