@@ -9,6 +9,7 @@ readonly class PatientDto
     public function __construct(
         public string $name,
         public string $email,
+        public int $user_id,
     ) {
     }
 }

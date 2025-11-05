@@ -24,6 +24,7 @@ class PatientFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->email(),
+            'user_id' => UserFactory::new(),
         ];
     }
 }
