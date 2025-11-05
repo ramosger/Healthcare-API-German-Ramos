@@ -51,8 +51,7 @@ final class UpsertAppointmentRequest extends FormRequest
                 'required',
                 'integer',
                 'min:1',
-                Rule::exists(Patient::class, 'id'),
-                Rule::exists('patients', 'id')->where(
+                Rule::exists(Patient::class, 'id')->where(
                     fn (Builder $q): Builder =>
                     $q->where('user_id', $this->integer(self::USER_ID))
                 ),

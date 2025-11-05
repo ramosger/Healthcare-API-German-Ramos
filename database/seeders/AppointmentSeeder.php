@@ -15,6 +15,12 @@ class AppointmentSeeder extends Seeder
 {
     public function run(): void
     {
+        $this->call([
+            DoctorClinicSeeder::class,
+            PatientSeeder::class,
+            UserSeeder::class,
+        ]);
+
         $doctorIds  = Doctor::query()->pluck('id');
         $patientIds = Patient::query()->pluck('id');
         $userIds = User::query()->pluck('id');
