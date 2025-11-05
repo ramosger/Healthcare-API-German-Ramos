@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightit\Appointments\Domain\Services;
+namespace Lightit\Appointments\Domain\Guards;
 
 use DomainException;
 use Illuminate\Database\Eloquent\Builder;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Lightit\Users\App\Controllers\GetCurrentUserController;
 use Illuminate\Support\Facades\Route;
+use Lightit\Authentication\App\Controllers\{LoginController, LogoutController, RefreshController};
 use Lightit\Users\App\Controllers\{GetUserController, DeleteUserController, ListUserController, StoreUserController, UpdateUserController};
 use Lightit\Doctors\App\Controllers\{GetDoctorController, ListDoctorController, StoreDoctorController, UpdateDoctorController, DeleteDoctorController, AssignClinicsToDoctorController};
 use Lightit\Clinics\App\Controllers\{GetClinicController, ListClinicController, StoreClinicController, UpdateClinicController, DeleteClinicController, AssignDoctorsToClinicController};
@@ -23,6 +24,17 @@ use Lightit\Appointments\App\Controllers\{StoreAppointmentController, DeleteAppo
 
 Route::middleware('auth:sanctum')
     ->get('/me', GetCurrentUserController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Authentication Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('auth')->group(static function (): void {
+    Route::post('login', LoginController::class);
+    Route::post('logout', LogoutController::class);
+    Route::post('refresh', RefreshController::class);
+});
 
 /*
 |--------------------------------------------------------------------------
