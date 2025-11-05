@@ -24,6 +24,8 @@ final class UpsertAppointmentRequest extends FormRequest
 
     public const CLINIC_ID = 'clinic_id';
 
+    public const USER_ID = 'user_id';
+
     public const START_DATE = 'start_date';
 
     public const END_DATE = 'end_date';
@@ -44,8 +46,17 @@ final class UpsertAppointmentRequest extends FormRequest
                     $q->where('clinic_id', $this->integer(self::CLINIC_ID))
                 ),
             ],
-            self::CLINIC_ID => ['required', 'integer', 'min:1', Rule::exists(Clinic::class, 'id')],
-            self::PATIENT_ID => ['required', 'integer', 'min:1', Rule::exists(Patient::class, 'id')],
+            self::CLINIC_ID => ['required', 'integer', 'min:1', Rule::exists(Clinic::class, 'id'), ],
+            self::PATIENT_ID => [
+                'required',
+                'integer',
+                'min:1',
+                Rule::exists(Patient::class, 'id'),
+                Rule::exists('patients', 'id')->where(
+                    fn (Builder $q): Builder =>
+                    $q->where('user_id', $this->integer(self::USER_ID))
+                ),
+            ],
             self::START_DATE => ['required', 'date', 'after:now'],
             self::END_DATE => ['required', 'date', 'after:' . self::START_DATE],
         ];
@@ -103,6 +114,7 @@ final class UpsertAppointmentRequest extends FormRequest
         return new AppointmentDto(
             doctor_id: $this->integer(self::DOCTOR_ID),
             patient_id: $this->integer(self::PATIENT_ID),
+            user_id: $this->integer(self::USER_ID),
             clinic_id: $this->integer(self::CLINIC_ID),
             start_date: CarbonImmutable::parse($this->string(self::START_DATE)->toString()),
             end_date: CarbonImmutable::parse($this->string(self::END_DATE)->toString()),
@@ -116,6 +128,7 @@ final class UpsertAppointmentRequest extends FormRequest
     {
         return [
             self::DOCTOR_ID . '.exists' => 'The doctor is not assigned to the selected clinic',
+            self::USER_ID . 'exists'=> 'The patient is assigned to another user',
             self::END_DATE . '.after' => 'End Date must be greater than the Start Date',
             self::START_DATE . '.after' => 'You can`t book an appointment in the past',
         ];

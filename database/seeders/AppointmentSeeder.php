@@ -9,6 +9,7 @@ use Database\Factories\AppointmentFactory;
 use Lightit\Doctors\Domain\Models\Doctor;
 use Lightit\Clinics\Domain\Models\Clinic;
 use Lightit\Patients\Domain\Models\Patient;
+use Lightit\Users\Domain\Models\User;
 
 class AppointmentSeeder extends Seeder
 {
@@ -16,6 +17,7 @@ class AppointmentSeeder extends Seeder
     {
         $doctorIds  = Doctor::query()->pluck('id');
         $patientIds = Patient::query()->pluck('id');
+        $userIds = User::query()->pluck('id');
         $clinicIds  = Clinic::query()->pluck('id');
 
         AppointmentFactory::new()
@@ -23,6 +25,7 @@ class AppointmentSeeder extends Seeder
             ->state(fn () => [
                 'doctor_id'  => $doctorIds->random(),
                 'patient_id' => $patientIds->random(),
+                'user_id'=> $userIds->random(),
                 'clinic_id'  => $clinicIds->random(),
             ])
             ->create();

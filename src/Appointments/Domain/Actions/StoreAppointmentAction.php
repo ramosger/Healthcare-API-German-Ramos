@@ -22,12 +22,13 @@ class StoreAppointmentAction
 
         $appointment->doctor_id = $appointmentDto->doctor_id;
         $appointment->patient_id = $appointmentDto->patient_id;
+        $appointment->user_id = $appointmentDto->user_id;
         $appointment->clinic_id = $appointmentDto->clinic_id;
         $appointment->start_date = $appointmentDto->start_date->toDateTimeString();
         $appointment->end_date = $appointmentDto->end_date->toDateTimeString();
 
         $appointment->saveOrFail();
 
-        return $appointment->refresh()->load(['doctor', 'patient', 'clinic']);
+        return $appointment->refresh()->load(['doctor', 'patient', 'user', 'clinic']);
     }
 }
