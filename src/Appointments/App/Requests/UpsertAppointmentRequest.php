@@ -8,7 +8,6 @@ use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 use Lightit\Appointments\Domain\DataTransferObjects\AppointmentDto;
@@ -52,59 +51,55 @@ final class UpsertAppointmentRequest extends FormRequest
         ];
     }
 
-    public function withValidator(Validator $validator): void
+    public function after(): array
     {
-        $validator->after(function ($v): void {
-            $doctorId = $this->integer(self::DOCTOR_ID);
-            $patientId = $this->integer(self::PATIENT_ID);
-            $clinicId = $this->integer(self::CLINIC_ID);
-            $startRaw = $this->string(self::START_DATE)->toString();
-            $endRaw = $this->string(self::END_DATE)->toString();
+        return [
+            function (Validator $v): void {
+                $doctorId = $this->integer(self::DOCTOR_ID);
+                $patientId = $this->integer(self::PATIENT_ID);
+                $clinicId = $this->integer(self::CLINIC_ID);
+                $startRaw = $this->string(self::START_DATE)->toString();
+                $endRaw = $this->string(self::END_DATE)->toString();
 
-            if (! $doctorId || ! $patientId || ! $clinicId || ! $startRaw || ! $endRaw) {
-                return;
-            }
+                if (! $doctorId || ! $patientId || ! $clinicId || ! $startRaw || ! $endRaw) {
+                    return;
+                }
 
-            $start = CarbonImmutable::parse((string) $startRaw);
-            $end = CarbonImmutable::parse((string) $endRaw);
+                $start = CarbonImmutable::parse((string) $startRaw);
+                $end = CarbonImmutable::parse((string) $endRaw);
 
-            $overlapScope = static function (EloquentBuilder $q) use ($start, $end): EloquentBuilder {
-                return $q
-                    ->where('start_date', '<', $end)
-                    ->where('end_date', '>', $start);
-            };
+                $overlapScope = static function (EloquentBuilder $q) use ($start, $end): EloquentBuilder {
+                    return $q
+                        ->where('start_date', '<', $end)
+                        ->where('end_date', '>', $start);
+                };
 
-            $doctorOverlap = Appointment::query()
-                ->where('doctor_id', $doctorId)
-                ->where('clinic_id', $clinicId)
-                ->tap($overlapScope)
-                ->exists();
+                $doctorOverlap = Appointment::query()
+                    ->where('doctor_id', $doctorId)
+                    ->where('clinic_id', $clinicId)
+                    ->tap($overlapScope)
+                    ->exists();
 
-            if ($doctorOverlap) {
-                throw new HttpResponseException(response()->json([
-                    'error' => [
-                        'code' => 'DOCTOR_OVERLAP',
-                        'message' => 'The doctor already has an appointment in the selected date range.',
-                    ],
-                ], 422));
-            }
+                if ($doctorOverlap) {
+                    $v->errors()->add(
+                        self::START_DATE,
+                        'The Doctor already has an appointment in the selected date range'
+                    );
+                }
 
-            $patientOverlap = Appointment::query()
-                ->where('patient_id', $patientId)
-                ->tap($overlapScope)
-                ->exists();
+                $patientOverlap = Appointment::query()
+                    ->where('patient_id', $patientId)
+                    ->tap($overlapScope)
+                    ->exists();
 
-            if ($patientOverlap) {
-                throw new HttpResponseException(
-                    response()->json([
-                        'error' => [
-                            'code' => 'PATIENT_OVERLAP',
-                            'message' => 'The patient already has an appointment in the selected date range.',
-                        ],
-                    ], 422)
-                );
-            }
-        });
+                if ($patientOverlap) {
+                    $v->errors()->add(
+                        self::START_DATE,
+                        'The Patient already has an appointment in the selected date range'
+                    );
+                }
+            },
+        ];
     }
 
     public function toDto(): AppointmentDto
