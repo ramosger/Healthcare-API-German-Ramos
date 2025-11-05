@@ -65,8 +65,8 @@ final class UpsertAppointmentRequest extends FormRequest
                     return;
                 }
 
-                $start = CarbonImmutable::parse((string) $startRaw);
-                $end = CarbonImmutable::parse((string) $endRaw);
+                $start = CarbonImmutable::parse($startRaw);
+                $end = CarbonImmutable::parse($endRaw);
 
                 $overlapScope = static function (EloquentBuilder $q) use ($start, $end): EloquentBuilder {
                     return $q

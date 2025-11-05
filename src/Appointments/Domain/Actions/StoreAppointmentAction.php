@@ -21,6 +21,6 @@ class StoreAppointmentAction
 
         $appointment->saveOrFail();
 
-        return $appointment;
+        return $appointment->refresh()->load(['doctor', 'patient', 'clinic']);
     }
 }
