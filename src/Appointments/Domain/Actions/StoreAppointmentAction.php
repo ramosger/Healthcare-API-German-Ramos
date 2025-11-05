@@ -6,11 +6,18 @@ namespace Lightit\Appointments\Domain\Actions;
 
 use Lightit\Appointments\Domain\DataTransferObjects\AppointmentDto;
 use Lightit\Appointments\Domain\Models\Appointment;
+use Lightit\Appointments\Domain\Services\AppointmentGuard;
 
 class StoreAppointmentAction
 {
+    public function __construct(private readonly AppointmentGuard $guard)
+    {
+    }
+
     public function execute(AppointmentDto $appointmentDto): Appointment
     {
+        $this->guard->assertCanCreate($appointmentDto);
+
         $appointment = new Appointment();
 
         $appointment->doctor_id = $appointmentDto->doctor_id;
