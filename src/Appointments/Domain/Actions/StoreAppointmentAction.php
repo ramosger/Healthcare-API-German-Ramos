@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Lightit\Appointments\Domain\Actions;
 
 use Lightit\Appointments\Domain\DataTransferObjects\AppointmentDto;
+use Lightit\Appointments\Domain\Guards\AppointmentGuard;
 use Lightit\Appointments\Domain\Models\Appointment;
-use Lightit\Appointments\Domain\Services\AppointmentGuard;
 
 class StoreAppointmentAction
 {
