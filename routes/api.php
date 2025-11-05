@@ -30,10 +30,12 @@ Route::middleware('auth:sanctum')
 | Authentication Routes
 |--------------------------------------------------------------------------
 */
-Route::prefix('auth')->group(static function (): void {
+Route::prefix('auth')->group(function (): void {
     Route::post('login', LoginController::class);
-    Route::post('logout', LogoutController::class);
-    Route::post('refresh', RefreshController::class);
+    Route::middleware('auth:api')->group(function (): void {
+        Route::post('logout', LogoutController::class);
+        Route::post('refresh', RefreshController::class);
+    });
 });
 
 /*
@@ -113,8 +115,9 @@ Route::prefix('patients')->group(static function (): void {
 |--------------------------------------------------------------------------
 */
 Route::prefix('appointments')->group(static function (): void {
-    Route::post('/', StoreAppointmentController::class);
-
-    Route::delete('/{appointment}', DeleteAppointmentController::class)
+    Route::middleware('auth:api')->group(function (): void {
+        Route::post('/', StoreAppointmentController::class);
+        Route::delete('/{appointment}', DeleteAppointmentController::class)
             ->whereNumber('appointment');
+    });
 });
