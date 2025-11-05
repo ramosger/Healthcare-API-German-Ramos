@@ -68,11 +68,7 @@ final class UpsertAppointmentRequest extends FormRequest
                 $start = CarbonImmutable::parse($startRaw);
                 $end = CarbonImmutable::parse($endRaw);
 
-                $overlapScope = static function (EloquentBuilder $q) use ($start, $end): EloquentBuilder {
-                    return $q
-                        ->where('start_date', '<', $end)
-                        ->where('end_date', '>', $start);
-                };
+                $overlapScope = $this->calculateOverlapScope($start, $end);
 
                 $doctorOverlap = Appointment::query()
                     ->where('doctor_id', $doctorId)
@@ -123,5 +119,13 @@ final class UpsertAppointmentRequest extends FormRequest
             self::END_DATE . '.after' => 'End Date must be greater than the Start Date',
             self::START_DATE . '.after' => 'You can`t book an appointment in the past',
         ];
+    }
+
+    private function calculateOverlapScope(CarbonImmutable $start, CarbonImmutable $end): callable
+    {
+        return static fn (EloquentBuilder $q): EloquentBuilder =>
+            $q
+                ->where('start_date', '<', $end)
+                ->where('end_date', '>', $start);
     }
 }
