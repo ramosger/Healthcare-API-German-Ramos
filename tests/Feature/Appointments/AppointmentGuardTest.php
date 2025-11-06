@@ -7,7 +7,6 @@ use Database\Factories\AppointmentFactory;
 use Database\Factories\ClinicFactory;
 use Database\Factories\DoctorFactory;
 use Database\Factories\PatientFactory;
-use DomainException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Lightit\Appointments\Domain\DataTransferObjects\AppointmentDto;
 use Lightit\Appointments\Domain\Guards\AppointmentGuard;
@@ -27,7 +26,7 @@ test('throws domain exception when doctor does not exist', function (): void {
     );
 
     expect(fn () => call_user_func([new AppointmentGuard(), 'assertCanCreate'], $dto))
-        ->toThrow(DomainException::class, 'Doctor does not exist');
+        ->toThrow(\DomainException::class, 'Doctor does not exist');
 });
 
 test('throws domain exception when patient does not exist', function (): void {
@@ -43,7 +42,7 @@ test('throws domain exception when patient does not exist', function (): void {
     );
 
     expect(fn () => call_user_func([new AppointmentGuard(), 'assertCanCreate'], $dto))
-        ->toThrow(DomainException::class, 'Patient does not exist');
+        ->toThrow(\DomainException::class, 'Patient does not exist');
 });
 
 test('throws domain exception when doctor is not assigned to selected clinic', function (): void {
@@ -60,7 +59,7 @@ test('throws domain exception when doctor is not assigned to selected clinic', f
     );
 
     expect(fn () => call_user_func([new AppointmentGuard(), 'assertCanCreate'], $dto))
-        ->toThrow(DomainException::class, 'The doctor is not assigned to the selected clinic');
+        ->toThrow(\DomainException::class, 'The doctor is not assigned to the selected clinic');
 });
 
 test('throws domain exception when doctor already has overlapping appointments in clinic', function (): void {
@@ -93,7 +92,7 @@ test('throws domain exception when doctor already has overlapping appointments i
     );
 
     expect(fn () => call_user_func([new AppointmentGuard(), 'assertCanCreate'], $dto))
-        ->toThrow(DomainException::class, 'The doctor already has an appointment in the selected date range');
+        ->toThrow(\DomainException::class, 'The doctor already has an appointment in the selected date range');
 });
 
 test('throws domain exception when patient already has overlapping appointments', function (): void {
@@ -131,5 +130,5 @@ test('throws domain exception when patient already has overlapping appointments'
     );
 
     expect(fn () => call_user_func([new AppointmentGuard(), 'assertCanCreate'], $dto))
-        ->toThrow(DomainException::class, 'The patient already has an appointment in the selected date range');
+        ->toThrow(\DomainException::class, 'The patient already has an appointment in the selected date range');
 });
