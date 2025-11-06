@@ -22,10 +22,12 @@ class StoreAppointmentAction
 
         $appointment->doctor_id = $appointmentDto->doctor_id;
         $appointment->patient_id = $appointmentDto->patient_id;
-        $appointment->user_id = $appointmentDto->user_id;
         $appointment->clinic_id = $appointmentDto->clinic_id;
         $appointment->start_date = $appointmentDto->start_date->toDateTimeString();
         $appointment->end_date = $appointmentDto->end_date->toDateTimeString();
+
+        $patient = \Lightit\Patients\Domain\Models\Patient::query()->findOrFail($appointmentDto->patient_id);
+        $appointment->user()->associate($patient->user);
 
         $appointment->saveOrFail();
 

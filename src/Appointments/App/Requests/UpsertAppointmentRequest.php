@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lightit\Appointments\App\Requests;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
@@ -24,8 +25,6 @@ final class UpsertAppointmentRequest extends FormRequest
 
     public const CLINIC_ID = 'clinic_id';
 
-    public const USER_ID = 'user_id';
-
     public const START_DATE = 'start_date';
 
     public const END_DATE = 'end_date';
@@ -35,6 +34,8 @@ final class UpsertAppointmentRequest extends FormRequest
      */
     public function rules(): array
     {
+        $userId = $this->authenticatedUserId();
+
         return [
             self::DOCTOR_ID => [
                 'required',
@@ -53,7 +54,7 @@ final class UpsertAppointmentRequest extends FormRequest
                 'min:1',
                 Rule::exists(Patient::class, 'id')->where(
                     fn (Builder $q): Builder =>
-                    $q->where('user_id', $this->integer(self::USER_ID))
+                    $q->where('user_id', $userId)
                 ),
             ],
             self::START_DATE => ['required', 'date', 'after:now'],
@@ -113,7 +114,6 @@ final class UpsertAppointmentRequest extends FormRequest
         return new AppointmentDto(
             doctor_id: $this->integer(self::DOCTOR_ID),
             patient_id: $this->integer(self::PATIENT_ID),
-            user_id: $this->integer(self::USER_ID),
             clinic_id: $this->integer(self::CLINIC_ID),
             start_date: CarbonImmutable::parse($this->string(self::START_DATE)->toString()),
             end_date: CarbonImmutable::parse($this->string(self::END_DATE)->toString()),
@@ -127,7 +127,7 @@ final class UpsertAppointmentRequest extends FormRequest
     {
         return [
             self::DOCTOR_ID . '.exists' => 'The doctor is not assigned to the selected clinic',
-            self::USER_ID . 'exists'=> 'The patient is assigned to another user',
+            self::PATIENT_ID . '.exists' => 'The patient does not belong to the authenticated user',
             self::END_DATE . '.after' => 'End Date must be greater than the Start Date',
             self::START_DATE . '.after' => 'You can`t book an appointment in the past',
         ];
@@ -139,5 +139,19 @@ final class UpsertAppointmentRequest extends FormRequest
             $q
                 ->where('start_date', '<', $end)
                 ->where('end_date', '>', $start);
+    }
+
+    private function authenticatedUserId(): int|string
+    {
+        $user = $this->user();
+
+        if ($user === null) {
+            throw new AuthenticationException();
+        }
+
+        /** @var int|string */
+        $userId = $user->getKey();
+
+        return $userId;
     }
 }
