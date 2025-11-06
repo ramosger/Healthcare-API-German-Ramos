@@ -9,198 +9,206 @@ use Database\Factories\PatientFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Lightit\Clinics\Domain\Models\Clinic;
-use Lightit\Doctors\Domain\Models\Doctor;
-use Lightit\Patients\Domain\Models\Patient;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\postJson;
 use function Pest\Laravel\withoutMiddleware;
 
 uses(RefreshDatabase::class);
 
-test('creates an appointment with all valid fields', function (): void {
-    $user = actingAsApi();
+describe('POST /api/appointments', function (): void {
+    /**
+     * @return array{0: Carbon\CarbonImmutable, 1: Carbon\CarbonImmutable}
+     */
+    $interval = static function (): array {
+        $start = CarbonImmutable::now()->addHour()->seconds(0);
+        $end = $start->addMinutes(60);
 
-    ClinicFactory::new()->count(10)->create();
+        return [$start, $end];
+    };
 
-    /** @var Doctor */
-    $doctor = DoctorFactory::new()->withRandomClinics(1, 3)->createOne();
+    /**
+     * @return array<string, int|string>
+     */
+    $payload = static function (
+        int $doctorId,
+        int $patientId,
+        int $clinicId,
+        CarbonImmutable $start,
+        CarbonImmutable $end,
+    ): array {
+        return [
+            'doctor_id'  => $doctorId,
+            'patient_id' => $patientId,
+            'clinic_id'  => $clinicId,
+            'start_date' => $start->toISOString(),
+            'end_date'   => $end->toISOString(),
+        ];
+    };
 
-    /** @var Patient */
-    $patient = PatientFactory::new()->createOne(['user_id' => $user->id]);
+    it('creates an appointment with all valid fields', function () use ($interval, $payload): void {
+        $user = actingAsApi();
 
-    $clinicId = $doctor->clinics()->firstOrFail()->getKey();
+        ClinicFactory::new()->count(10)->create();
 
-    $start = CarbonImmutable::now()->addHour()->seconds(0);
-    $end = $start->addMinutes(60);
+        $doctor = DoctorFactory::new()->withRandomClinics(1, 3)->createOne();
+        $patient = PatientFactory::new()->createOne(['user_id' => $user->id]);
 
-    $payload = [
-        'doctor_id'  => $doctor->id,
-        'patient_id' => $patient->id,
-        'clinic_id'  => $clinicId,
-        'start_date' => $start->toISOString(),
-        'end_date'   => $end->toISOString(),
-    ];
+        $rawClinicId = $doctor->clinics()->firstOrFail()->getKey();
+        assert(is_int($rawClinicId));
+        $clinicId = $rawClinicId;
 
-    $response = postJson('/api/appointments', $payload);
+        [$start, $end] = $interval();
 
-    $response->assertJsonFragment([
-        'doctor_id'  => $doctor->id,
-        'patient_id' => $patient->id,
-        'clinic_id'  => $clinicId,
-    ]);
+        $body = $payload($doctor->id, $patient->id, $clinicId, $start, $end);
 
-    assertDatabaseHas('appointments', [
-        'doctor_id'  => $doctor->id,
-        'patient_id' => $patient->id,
-        'clinic_id'  => $clinicId,
-    ]);
-});
+        $response = postJson('/api/appointments', $body)->assertCreated();
 
-test('fails with 422 when patient is not associated with logged user', function (): void {
-    actingAsApi();
+        $response->assertJsonFragment([
+            'doctor_id'  => $doctor->id,
+            'patient_id' => $patient->id,
+            'clinic_id'  => $clinicId,
+        ]);
 
-    ClinicFactory::new()->count(10)->create();
+        assertDatabaseHas('appointments', [
+            'doctor_id'  => $doctor->id,
+            'patient_id' => $patient->id,
+            'clinic_id'  => $clinicId,
+        ]);
+    });
 
-    /** @var Doctor */
-    $doctor = DoctorFactory::new()->withRandomClinics(1, 3)->createOne();
+    it('fails with 422 when patient is not associated with logged user', function () use ($interval, $payload): void {
+        actingAsApi();
 
-    /** @var Patient */
-    $patient = PatientFactory::new()->createOne();
+        ClinicFactory::new()->count(10)->create();
 
-    $clinicId = $doctor->clinics()->firstOrFail()->getKey();
+        $doctor = DoctorFactory::new()->withRandomClinics(1, 3)->createOne();
+        $patient = PatientFactory::new()->createOne();
 
-    $start = CarbonImmutable::now()->addHour()->seconds(0);
-    $end = $start->addMinutes(60);
+        $rawClinicId = $doctor->clinics()->firstOrFail()->getKey();
+        assert(is_int($rawClinicId));
+        $clinicId = $rawClinicId;
 
-    $payload = [
-        'doctor_id'  => $doctor->id,
-        'patient_id' => $patient->id,
-        'clinic_id'  => $clinicId,
-        'start_date' => $start->toISOString(),
-        'end_date'   => $end->toISOString(),
-    ];
+        [$start, $end] = $interval();
 
-    postJson('/api/appointments', $payload)->assertUnprocessable();
-});
+        postJson('/api/appointments', $payload($doctor->id, $patient->id, $clinicId, $start, $end))
+            ->assertUnprocessable();
+    });
 
-test('fails with 422 when required fields are missing', function (): void {
-    actingAsApi();
+    it('fails with 422 when required fields are missing', function (): void {
+        actingAsApi();
 
-    postJson('/api/appointments', [])->assertUnprocessable();
-});
+        postJson('/api/appointments', [])
+            ->assertUnprocessable();
+    });
 
-test('fails with 422 when doctor does not belong to given clinic', function (): void {
-    actingAsApi();
+    it('fails with 422 when doctor does not belong to given clinic', function (): void {
+        actingAsApi();
 
-    ClinicFactory::new()->count(10)->create();
+        ClinicFactory::new()->count(10)->create();
 
-    /** @var Doctor */
-    $doctor = DoctorFactory::new()->withRandomClinics(1, 3)->createOne();
+        $doctor = DoctorFactory::new()->withRandomClinics(1, 3)->createOne();
+        $patient = PatientFactory::new()->createOne();
+        $unlinkedClinic = ClinicFactory::new()->createOne();
 
-    /** @var Patient */
-    $patient = PatientFactory::new()->createOne();
+        postJson('/api/appointments', [
+            'doctor_id'  => $doctor->id,
+            'patient_id' => $patient->id,
+            'clinic_id'  => $unlinkedClinic->id,
+            'start_date' => CarbonImmutable::now()->addHour()->toISOString(),
+            'end_date'   => CarbonImmutable::now()->addHours(2)->toISOString(),
+        ])->assertUnprocessable();
+    });
 
-    /** @var Clinic */
-    $unlinkedClinic = ClinicFactory::new()->createOne();
+    it(
+        'fails with 422 when doctor already has an appointment in the selected date range',
+        function () use ($interval): void {
+            $user = actingAsApi();
+            $anotherUser = UserFactory::new()->createOne();
+    
+            ClinicFactory::new()->count(5)->create();
+    
+            $doctor = DoctorFactory::new()->withRandomClinics(1, 2)->createOne();
+            $p1 = PatientFactory::new()->createOne(['user_id' => $user->id]);
+            $p2 = PatientFactory::new()->createOne(['user_id' => $anotherUser->id]);
+    
+            $rawClinicId = $doctor->clinics()->firstOrFail()->getKey();
+            assert(is_int($rawClinicId));
+            $clinicId = $rawClinicId;
+    
+            [$start, $end] = $interval();
+    
+            postJson('/api/appointments', [
+                'doctor_id'  => $doctor->id,
+                'patient_id' => $p1->id,
+                'clinic_id'  => $clinicId,
+                'start_date' => $start->toDateTimeString(),
+                'end_date'   => $end->toDateTimeString(),
+            ])->assertCreated();
+    
+            $response = postJson('/api/appointments', [
+                'doctor_id'  => $doctor->id,
+                'patient_id' => $p2->id,
+                'clinic_id'  => $clinicId,
+                'start_date' => $start->addMinutes(30)->toDateTimeString(),
+                'end_date'   => $end->addMinutes(30)->toDateTimeString(),
+            ])->assertUnprocessable();
+    
+            $response->assertJsonPath('error.code', 'validation_failed');
+            $response->assertJsonStructure(['error' => ['message', 'fields' => ['start_date']]]);
+            expect($response->json('error.fields.start_date'))
+                ->toBeArray()
+                ->toContain('The Doctor already has an appointment in the selected date range');
+        }
+    );
 
-    $payload = [
-        'doctor_id'  => $doctor->id,
-        'patient_id' => $patient->id,
-        'clinic_id'  => $unlinkedClinic->id,
-        'start_date' => CarbonImmutable::now()->addHour()->toISOString(),
-        'end_date'   => CarbonImmutable::now()->addHours(2)->toISOString(),
-    ];
+    it(
+        'fails with 422 when patient already has an appointment in the selected date range',
+        function () use ($interval): void {
+            $user = actingAsApi();
+    
+            ClinicFactory::new()->count(5)->create();
+    
+            $doctorA = DoctorFactory::new()->withRandomClinics(1, 2)->createOne();
+            $doctorB = DoctorFactory::new()->withRandomClinics(1, 2)->createOne();
+            $patient = PatientFactory::new()->createOne(['user_id' => $user->id]);
+    
+            $rawClinicA = $doctorA->clinics()->firstOrFail()->getKey();
+            $rawClinicB = $doctorB->clinics()->firstOrFail()->getKey();
+            assert(is_int($rawClinicA));
+            assert(is_int($rawClinicB));
+            $clinicA = $rawClinicA;
+            $clinicB = $rawClinicB;
+    
+            [$start, $end] = $interval();
+    
+            postJson('/api/appointments', [
+                'doctor_id'  => $doctorA->id,
+                'patient_id' => $patient->id,
+                'clinic_id'  => $clinicA,
+                'start_date' => $start->toDateTimeString(),
+                'end_date'   => $end->toDateTimeString(),
+            ])->assertCreated();
+    
+            $response = postJson('/api/appointments', [
+                'doctor_id'  => $doctorB->id,
+                'patient_id' => $patient->id,
+                'clinic_id'  => $clinicB,
+                'start_date' => $start->addMinutes(15)->toDateTimeString(),
+                'end_date'   => $end->addMinutes(15)->toDateTimeString(),
+            ])->assertUnprocessable();
+    
+            $response->assertJsonPath('error.code', 'validation_failed');
+            $response->assertJsonStructure(['error' => ['message', 'fields' => ['start_date']]]);
+            expect($response->json('error.fields.start_date'))
+                ->toBeArray()
+                ->toContain('The Patient already has an appointment in the selected date range');
+        }
+    );
 
-    postJson('/api/appointments', $payload)->assertUnprocessable();
-});
+    it('returns 401 when user is non authenticated', function (): void {
+        withoutMiddleware([Authenticate::class]);
 
-test('fails with 422 when doctor already has an appointment in the selected date range', function (): void {
-    $user = actingAsApi();
-    $anotherUser = UserFactory::new()->createOne();
-
-    ClinicFactory::new()->count(5)->create();
-
-    /** @var Doctor */
-    $doctor = DoctorFactory::new()->withRandomClinics(1, 2)->createOne();
-    /** @var Patient */
-    $p1 = PatientFactory::new()->createOne(['user_id' => $user->id]);
-    /** @var Patient */
-    $p2 = PatientFactory::new()->createOne(['user_id' => $anotherUser->id]);
-
-    $clinicId = $doctor->clinics()->firstOrFail()->getKey();
-
-    $start = CarbonImmutable::now()->addHour()->seconds(0);
-    $end = $start->addMinutes(60);
-
-    postJson('/api/appointments', [
-        'doctor_id'  => $doctor->id,
-        'patient_id' => $p1->id,
-        'clinic_id'  => $clinicId,
-        'start_date' => $start->toDateTimeString(),
-        'end_date'   => $end->toDateTimeString(),
-    ])->assertCreated();
-
-    $response = postJson('/api/appointments', [
-        'doctor_id'  => $doctor->id,
-        'patient_id' => $p2->id,
-        'clinic_id'  => $clinicId,
-        'start_date' => $start->addMinutes(30)->toDateTimeString(),
-        'end_date'   => $end->addMinutes(30)->toDateTimeString(),
-    ])->assertUnprocessable();
-
-    $response->assertJsonPath('error.code', 'validation_failed');
-    $response->assertJsonStructure(['error' => ['message', 'fields' => ['start_date']]]);
-    expect($response->json('error.fields.start_date'))
-        ->toBeArray()
-        ->toContain('The Doctor already has an appointment in the selected date range');
-});
-
-test('fails with 422 when patient already has an appointment in the selected date range', function (): void {
-    $user = actingAsApi();
-
-    ClinicFactory::new()->count(5)->create();
-
-    /** @var Doctor */
-    $doctorA = DoctorFactory::new()->withRandomClinics(1, 2)->createOne();
-    /** @var Doctor */
-    $doctorB = DoctorFactory::new()->withRandomClinics(1, 2)->createOne();
-    /** @var Patient */
-    $patient = PatientFactory::new()->createOne(['user_id' => $user->id]);
-
-    $clinicA = $doctorA->clinics()->firstOrFail()->getKey();
-    $clinicB = $doctorB->clinics()->firstOrFail()->getKey();
-
-    $start = CarbonImmutable::now()->addHour()->seconds(0);
-    $end = $start->addMinutes(60);
-
-    postJson('/api/appointments', [
-        'doctor_id'  => $doctorA->id,
-        'patient_id' => $patient->id,
-        'clinic_id'  => $clinicA,
-        'start_date' => $start->toDateTimeString(),
-        'end_date'   => $end->toDateTimeString(),
-    ])->assertCreated();
-
-    $response = postJson('/api/appointments', [
-        'doctor_id'  => $doctorB->id,
-        'patient_id' => $patient->id,
-        'clinic_id'  => $clinicB,
-        'start_date' => $start->addMinutes(15)->toDateTimeString(),
-        'end_date'   => $end->addMinutes(15)->toDateTimeString(),
-    ])->assertUnprocessable();
-
-    $response->assertJsonPath('error.code', 'validation_failed');
-    $response->assertJsonStructure(['error' => ['message', 'fields' => ['start_date']]]);
-    expect($response->json('error.fields.start_date'))
-        ->toBeArray()
-        ->toContain('The Patient already has an appointment in the selected date range');
-});
-
-test('returns 401 when no authenticated user (authenticatedUserId)', function (): void {
-    withoutMiddleware([Authenticate::class]);
-
-    $resp = postJson('/api/appointments', []);
-
-    $resp->assertUnauthorized();
+        postJson('/api/appointments', [])
+            ->assertUnauthorized();
+    });
 });
