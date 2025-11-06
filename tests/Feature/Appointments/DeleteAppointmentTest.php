@@ -8,47 +8,45 @@ use Database\Factories\ClinicFactory;
 use Database\Factories\DoctorFactory;
 use Database\Factories\PatientFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Lightit\Appointments\Domain\Models\Appointment;
-use Lightit\Doctors\Domain\Models\Doctor;
-use Lightit\Patients\Domain\Models\Patient;
 use function Pest\Laravel\assertSoftDeleted;
 use function Pest\Laravel\deleteJson;
 
 uses(RefreshDatabase::class);
 
-test('soft deletes an existing appointment', function (): void {
-    $user = actingAsApi();
+describe('DELETE /api/appointments/{id}', function (): void {
+    it('soft deletes an existing appointment', function (): void {
+        $user = actingAsApi();
 
-    ClinicFactory::new()->count(10)->create();
+        ClinicFactory::new()->count(10)->create();
 
-    /** @var Doctor */
-    $doctor = DoctorFactory::new()->withRandomClinics(1, 3)->createOne();
+        $doctor = DoctorFactory::new()->withRandomClinics(1, 3)->createOne();
+        $patient = PatientFactory::new()->createOne(['user_id' => $user->id]);
 
-    /** @var Patient */
-    $patient = PatientFactory::new()->createOne(['user_id' => $user->id]);
+        $rawClinicId = $doctor->clinics()->firstOrFail()->getKey();
+        assert(is_int($rawClinicId));
+        $clinicId = $rawClinicId;
 
-    $clinicId = $doctor->clinics()->firstOrFail()->getKey();
+        $start = CarbonImmutable::now()->addHour()->seconds(0);
+        $end = $start->addMinutes(60);
 
-    $start = CarbonImmutable::now()->addHour()->seconds(0);
-    $end = $start->addMinutes(60);
+        $appointment = AppointmentFactory::new()->createOne([
+            'doctor_id'  => $doctor->id,
+            'patient_id' => $patient->id,
+            'clinic_id'  => $clinicId,
+            'start_date' => $start->toISOString(),
+            'end_date'   => $end->toISOString(),
+        ]);
 
-    /** @var Appointment */
-    $appointment = AppointmentFactory::new()->create([
-        'doctor_id' => $doctor->id,
-        'patient_id' => $patient->id,
-        'clinic_id' => $clinicId,
-        'start_date' => $start->toISOString(),
-        'end_date' => $end->toISOString(),
-    ]);
+        deleteJson("/api/appointments/{$appointment->id}")
+            ->assertNoContent();
 
-    deleteJson("/api/appointments/{$appointment->id}")
-        ->assertNoContent();
+        assertSoftDeleted('appointments', ['id' => $appointment->id]);
+    });
 
-    assertSoftDeleted('appointments', ['id' => $appointment->id]);
-});
+    it('fails with 404 when deleting a non existing appointment', function (): void {
+        actingAsApi();
 
-test('fails with 404 when deleting a non existing appointment', function (): void {
-    actingAsApi();
-
-    deleteJson('/api/appointments/999999')->assertNotFound();
+        deleteJson('/api/appointments/999999')
+            ->assertNotFound();
+    });
 });
