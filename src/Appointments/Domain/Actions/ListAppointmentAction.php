@@ -15,9 +15,8 @@ class ListAppointmentAction
      */
     public function execute(User $user): LengthAwarePaginator
     {
-        return Appointment::query()
+        return $user->appointments()
             ->with(['doctor', 'patient', 'clinic'])
-            ->where('user_id', $user->id)
             ->latest('start_date')
             ->paginate(10);
     }
