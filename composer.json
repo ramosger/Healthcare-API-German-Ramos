@@ -93,7 +93,8 @@
     "rector": "vendor/bin/rector process --dry-run --ansi",
     "rector:fix": "vendor/bin/rector process --ansi",
     "fixer": "composer ecs:fix && composer phpstan && composer rector:fix",
-    "coverage": "XDEBUG_MODE=coverage ./vendor/bin/sail php vendor/bin/pest --coverage-html coverage/appointments --coverage-filter=src/Appointments"
+    "coverage-html": "XDEBUG_MODE=coverage ./vendor/bin/sail php vendor/bin/pest --coverage-html coverage/appointments --coverage-filter=src/Appointments",
+    "coverage": "XDEBUG_MODE=coverage ./vendor/bin/sail php vendor/bin/pest --coverage --coverage-filter=src/Appointments"
   },
   "extra": {
     "laravel": {
