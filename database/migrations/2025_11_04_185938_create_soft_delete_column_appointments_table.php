@@ -10,17 +10,15 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('patients', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->foreignId('user_id');
-            $table->timestamps();
+        Schema::table('appointments', function (Blueprint $table) {
+            $table->softDeletes();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('patients');
+        Schema::table('appointments', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

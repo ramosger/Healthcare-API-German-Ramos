@@ -15,11 +15,11 @@ use Lightit\Clinics\Domain\Models\Clinic;
 final readonly class AssignDoctorsToClinicController
 {
     public function __invoke(
-        Clinic $clinicToAssignDoctors,
+        Clinic $clinic,
         AssignDoctorsToClinicRequest $request,
         AssignDoctorsToClinicAction $action,
     ): JsonResponse {
-        $clinicUpdated = $action->execute($clinicToAssignDoctors, $request->toDto());
+        $clinicUpdated = $action->execute($clinic, $request->toDto());
 
         return ClinicResource::make($clinicUpdated)
             ->response()

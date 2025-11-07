@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use Database\Factories\UserFactory;
+use Lightit\Users\Domain\Models\User;
+use function Pest\Laravel\actingAs;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -15,7 +19,6 @@ declare(strict_types=1);
 
 uses(
     Tests\TestCase::class,
-    Illuminate\Foundation\Testing\RefreshDatabase::class,
 )->in('Feature');
 
 /*
@@ -40,3 +43,11 @@ uses(
 | global functions to help you to reduce the number of lines of code in your test files.
 |
 */
+function actingAsApi(): User
+{
+    /** @var User */
+    $user = UserFactory::new()->create();
+    actingAs($user, 'api');
+
+    return $user;
+}
