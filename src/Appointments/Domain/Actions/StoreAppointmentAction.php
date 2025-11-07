@@ -7,6 +7,7 @@ namespace Lightit\Appointments\Domain\Actions;
 use Lightit\Appointments\Domain\DataTransferObjects\AppointmentDto;
 use Lightit\Appointments\Domain\Guards\AppointmentGuard;
 use Lightit\Appointments\Domain\Models\Appointment;
+use Lightit\Patients\Domain\Models\Patient;
 
 class StoreAppointmentAction
 {
@@ -26,7 +27,7 @@ class StoreAppointmentAction
         $appointment->start_date = $appointmentDto->start_date->toDateTimeString();
         $appointment->end_date = $appointmentDto->end_date->toDateTimeString();
 
-        $patient = \Lightit\Patients\Domain\Models\Patient::query()->findOrFail($appointmentDto->patient_id);
+        $patient = Patient::query()->findOrFail($appointmentDto->patient_id);
         $appointment->user()->associate($patient->user);
 
         $appointment->saveOrFail();
