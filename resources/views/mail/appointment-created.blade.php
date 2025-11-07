@@ -70,11 +70,7 @@
             <p><strong>Patient:</strong> {{ $patient->name ?? '—' }}</p>
             <p><strong>Doctor:</strong> {{ $doctor->name ?? '—' }}</p>
             <p><strong>Clinic:</strong> {{ $clinic->name ?? '—' }}</p>
-            <p><strong>Date:</strong>
-                {{ $appointment->start_date instanceof \Carbon\CarbonInterface
-    ? $appointment->start_date->format('d/m/Y H:i')
-    : $appointment->start_date }}
-            </p>
+            <p><strong>Date:</strong> {{ $startDate ?? '—' }}</p>
         </div>
 
         <p>Thank you</p>

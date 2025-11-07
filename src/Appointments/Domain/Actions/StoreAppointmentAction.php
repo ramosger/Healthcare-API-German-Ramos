@@ -9,7 +9,7 @@ use Lightit\Appointments\Domain\DataTransferObjects\AppointmentDto;
 use Lightit\Appointments\Domain\Guards\AppointmentGuard;
 use Lightit\Appointments\Domain\Models\Appointment;
 use Lightit\Patients\Domain\Models\Patient;
-use Lightit\Shared\App\Notifications\AppointmentCreated;
+use Lightit\Shared\App\Notifications\AppointmentCreatedNotification;
 
 class StoreAppointmentAction
 {
@@ -38,7 +38,7 @@ class StoreAppointmentAction
 
             $appointment->saveOrFail();
 
-            $notification = new AppointmentCreated($appointment);
+            $notification = new AppointmentCreatedNotification($appointment);
             $notification->afterCommit();
 
             $user->notify($notification);

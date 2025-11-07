@@ -12,7 +12,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Date;
 use Lightit\Appointments\Domain\Models\Appointment;
 
-class AppointmentCreated extends Notification implements ShouldQueue, ShouldBeEncrypted
+class AppointmentCreatedNotification extends Notification implements ShouldQueue, ShouldBeEncrypted
 {
     use Queueable;
 
@@ -38,7 +38,7 @@ class AppointmentCreated extends Notification implements ShouldQueue, ShouldBeEn
 
         $mail = new MailMessage();
         $mail->subject('Appointment Confirmation');
-        $mail->view('mail.appointment.created', [
+        $mail->view('mail.appointment-created', [
             'appointment' => $appointment,
             'doctor' => $appointment->doctor,
             'patient' => $appointment->patient,
