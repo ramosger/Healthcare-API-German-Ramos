@@ -14,6 +14,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('doctor_id');
             $table->foreignId('patient_id');
+            $table->foreignId('user_id');
             $table->foreignId('clinic_id');
             $table->dateTime('start_date');
             $table->dateTime('end_date');

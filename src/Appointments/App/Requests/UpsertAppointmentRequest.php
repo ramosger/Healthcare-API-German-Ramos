@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lightit\Appointments\App\Requests;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -33,6 +34,8 @@ final class UpsertAppointmentRequest extends FormRequest
      */
     public function rules(): array
     {
+        $userId = $this->authenticatedUserId();
+
         return [
             self::DOCTOR_ID => [
                 'required',
@@ -41,8 +44,13 @@ final class UpsertAppointmentRequest extends FormRequest
                 Rule::exists(Doctor::class, 'id'),
                 new DoctorBelongsToClinic($this->integer(self::CLINIC_ID)),
             ],
-            self::CLINIC_ID => ['required', 'integer', 'min:1', Rule::exists(Clinic::class, 'id')],
-            self::PATIENT_ID => ['required', 'integer', 'min:1', Rule::exists(Patient::class, 'id')],
+            self::CLINIC_ID => ['required', 'integer', 'min:1', Rule::exists(Clinic::class, 'id'), ],
+            self::PATIENT_ID => [
+                'required',
+                'integer',
+                'min:1',
+                Rule::exists(Patient::class, 'id')->where('user_id', $userId),
+            ],
             self::START_DATE => ['required', 'date', 'after:now'],
             self::END_DATE => ['required', 'date', 'after:' . self::START_DATE],
         ];
@@ -113,6 +121,7 @@ final class UpsertAppointmentRequest extends FormRequest
     {
         return [
             self::DOCTOR_ID . '.exists' => 'The doctor is not assigned to the selected clinic',
+            self::PATIENT_ID . '.exists' => 'The patient does not belong to the authenticated user',
             self::END_DATE . '.after' => 'End Date must be greater than the Start Date',
             self::START_DATE . '.after' => 'You can`t book an appointment in the past',
         ];
@@ -124,5 +133,19 @@ final class UpsertAppointmentRequest extends FormRequest
             $q
                 ->where('start_date', '<', $end)
                 ->where('end_date', '>', $start);
+    }
+
+    private function authenticatedUserId(): int|string
+    {
+        $user = $this->user();
+
+        if ($user === null) {
+            throw new AuthenticationException();
+        }
+
+        /** @var int|string */
+        $userId = $user->getKey();
+
+        return $userId;
     }
 }

@@ -11,6 +11,7 @@ use Lightit\Appointments\Domain\Models\Appointment;
 use Lightit\Clinics\App\Resources\ClinicResource;
 use Lightit\Doctors\App\Resources\DoctorResource;
 use Lightit\Patients\App\Resources\PatientResource;
+use Lightit\Users\App\Resources\UserResource;
 
 /**
  * @mixin Appointment
@@ -23,11 +24,12 @@ class AppointmentResource extends JsonResource
         return [
             'id' => $this->id,
             'doctor_id' => $this->doctor_id,
-            'doctor' => $this->whenLoaded('doctor', fn () => DoctorResource::make($this->doctor)),
+            'doctor' => DoctorResource::make($this->whenLoaded('doctor')),
             'patient_id' => $this->patient_id,
-            'patient' => $this->whenLoaded('patient', fn () => PatientResource::make($this->patient)),
+            'patient' => PatientResource::make($this->whenLoaded('patient')),
+            'user' => UserResource::make($this->whenLoaded('user')),
             'clinic_id' => $this->clinic_id,
-            'clinic' => $this->whenLoaded('clinic', fn () => ClinicResource::make($this->clinic)),
+            'clinic' => ClinicResource::make($this->whenLoaded('clinic')),
             'start_date'=> $this->start_date,
             'end_date'=> $this->end_date,
         ];
