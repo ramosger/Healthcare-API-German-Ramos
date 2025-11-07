@@ -7,7 +7,6 @@ namespace Lightit\Appointments\App\Requests;
 use Carbon\CarbonImmutable;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Illuminate\Database\Query\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
@@ -16,6 +15,7 @@ use Lightit\Appointments\Domain\Models\Appointment;
 use Lightit\Clinics\Domain\Models\Clinic;
 use Lightit\Doctors\Domain\Models\Doctor;
 use Lightit\Patients\Domain\Models\Patient;
+use Lightit\Shared\App\Rules\DoctorBelongsToClinic;
 
 final class UpsertAppointmentRequest extends FormRequest
 {
@@ -42,10 +42,7 @@ final class UpsertAppointmentRequest extends FormRequest
                 'integer',
                 'min:1',
                 Rule::exists(Doctor::class, 'id'),
-                Rule::exists('clinic_doctor', 'doctor_id')->where(
-                    fn (Builder $q): Builder =>
-                    $q->where('clinic_id', $this->integer(self::CLINIC_ID))
-                ),
+                new DoctorBelongsToClinic($this->integer(self::CLINIC_ID)),
             ],
             self::CLINIC_ID => ['required', 'integer', 'min:1', Rule::exists(Clinic::class, 'id'), ],
             self::PATIENT_ID => [
