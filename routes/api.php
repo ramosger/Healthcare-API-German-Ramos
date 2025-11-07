@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 use Lightit\Users\App\Controllers\GetCurrentUserController;
 use Illuminate\Support\Facades\Route;
+use Lightit\Authentication\App\Controllers\{LoginController, LogoutController, RefreshController};
 use Lightit\Users\App\Controllers\{GetUserController, DeleteUserController, ListUserController, StoreUserController, UpdateUserController};
 use Lightit\Doctors\App\Controllers\{GetDoctorController, ListDoctorController, StoreDoctorController, UpdateDoctorController, DeleteDoctorController, AssignClinicsToDoctorController};
 use Lightit\Clinics\App\Controllers\{GetClinicController, ListClinicController, StoreClinicController, UpdateClinicController, DeleteClinicController, AssignDoctorsToClinicController};
 use Lightit\Patients\App\Controllers\{GetPatientController, ListPatientController, StorePatientController, UpdatePatientController, DeletePatientController};
+use Lightit\Appointments\App\Controllers\{StoreAppointmentController, DeleteAppointmentController, ListAppointmentController};
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +24,19 @@ use Lightit\Patients\App\Controllers\{GetPatientController, ListPatientControlle
 
 Route::middleware('auth:sanctum')
     ->get('/me', GetCurrentUserController::class);
+
+/*
+|--------------------------------------------------------------------------
+| Authentication Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('auth')->group(function (): void {
+    Route::post('login', LoginController::class);
+    Route::middleware('auth:api')->group(function (): void {
+        Route::post('logout', LogoutController::class);
+        Route::post('refresh', RefreshController::class);
+    });
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -92,4 +107,18 @@ Route::prefix('patients')->group(static function (): void {
 
     Route::get('/', ListPatientController::class);
     Route::post('/', StorePatientController::class);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Appointments Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('appointments')->group(static function (): void {
+    Route::middleware('auth:api')->group(function (): void {
+        Route::post('/', StoreAppointmentController::class);
+        Route::delete('/{appointment}', DeleteAppointmentController::class)
+            ->whereNumber('appointment');
+        Route::get('/me/appointments', ListAppointmentController::class);
+    });
 });

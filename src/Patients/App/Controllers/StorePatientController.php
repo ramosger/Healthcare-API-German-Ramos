@@ -10,7 +10,7 @@ use Lightit\Patients\App\Requests\UpsertPatientRequest;
 use Lightit\Patients\App\Resources\PatientResource;
 use Lightit\Patients\Domain\Actions\StorePatientAction;
 
-#[Group('Clinics')]
+#[Group('Patients')]
 final class StorePatientController
 {
     public function __invoke(UpsertPatientRequest $request, StorePatientAction $action): JsonResponse

@@ -1,0 +1,679 @@
+{
+  "v": 10,
+  "name": "Healthcare API",
+  "folders": [
+    {
+      "v": 10,
+      "name": "Doctor Module",
+      "folders": [],
+      "requests": [
+        {
+          "v": "16",
+          "name": "Get All Doctors",
+          "method": "GET",
+          "endpoint": "<<url>>/doctors",
+          "params": [
+            {
+              "key": "page",
+              "value": "1",
+              "active": true,
+              "description": ""
+            }
+          ],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {},
+          "_ref_id": "req_mhf9y4e8_4dfab8ef-113d-47d4-9fb7-079f1687f56d"
+        },
+        {
+          "v": "16",
+          "name": "Get Doctor By Id",
+          "method": "GET",
+          "endpoint": "<<url>>/doctors/<<doctorId>>",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [
+            {
+              "key": "doctorId",
+              "value": "1",
+              "active": true
+            }
+          ],
+          "responses": {},
+          "_ref_id": "req_mhfb6arg_ced61c4e-b100-457c-b2f7-b9da5f92f6a0"
+        },
+        {
+          "v": "16",
+          "name": "Post Doctor",
+          "method": "POST",
+          "endpoint": "<<url>>/doctors",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"name\": \"Dr. Example\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {},
+          "_ref_id": "req_mhfcopai_f0f53311-95a9-4419-b121-3752e7ad13a8"
+        },
+        {
+          "v": "16",
+          "name": "Update Doctor",
+          "method": "PUT",
+          "endpoint": "<<url>>/doctors/<<doctorId>>",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"name\": \"Dr. Test\"\n}"
+          },
+          "requestVariables": [
+            {
+              "key": "doctorId",
+              "value": "20",
+              "active": true
+            }
+          ],
+          "responses": {},
+          "_ref_id": "req_mhj5a2yi_4bf3ce13-6f38-4f99-a4b0-b1ba67dd1ae2"
+        },
+        {
+          "v": "16",
+          "name": "Delete Doctor",
+          "method": "DELETE",
+          "endpoint": "<<url>>/doctors/<<doctorId>>",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [
+            {
+              "key": "doctorId",
+              "value": "20",
+              "active": true
+            }
+          ],
+          "responses": {},
+          "_ref_id": "req_mhj5gl3t_b6c87223-aa6e-4a0e-99b4-5882c22ea924"
+        },
+        {
+          "v": "16",
+          "name": "Assign Clinics To Doctor",
+          "method": "PUT",
+          "endpoint": "<<url>>/doctors/<<doctorId>>/clinics",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"clinic_ids\": [2, 3, 4]\n}"
+          },
+          "requestVariables": [
+            {
+              "key": "doctorId",
+              "value": "1",
+              "active": true
+            }
+          ],
+          "responses": {},
+          "_ref_id": "req_mhjb67gv_f9b18821-d4b9-4176-bddb-71e861d6a05a"
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "variables": [],
+      "_ref_id": "coll_mhj6vy0g_a618404d-9ab8-4a65-9819-428eb315b9d1"
+    },
+    {
+      "v": 10,
+      "name": "Clinic Module",
+      "folders": [],
+      "requests": [
+        {
+          "v": "16",
+          "name": "Get All Clinics",
+          "method": "GET",
+          "endpoint": "<<url>>/clinics",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {},
+          "_ref_id": "req_mhj6wg9p_96dae64a-faba-49d2-9e66-476a08c244c1"
+        },
+        {
+          "v": "16",
+          "name": "Get Clinic By Id",
+          "method": "GET",
+          "endpoint": "<<url>>/clinics/<<clinicId>>",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [
+            {
+              "key": "clinicId",
+              "value": "1",
+              "active": true
+            }
+          ],
+          "responses": {},
+          "_ref_id": "req_mhj93mau_209e95d8-bce9-4071-9b91-4cd0cd221fdb"
+        },
+        {
+          "v": "16",
+          "name": "Post Clinic",
+          "method": "POST",
+          "endpoint": "<<url>>/clinics",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"name\": \"Example Clinic\",\n  \"address\": \"Example Address 123\"\n}\n"
+          },
+          "requestVariables": [],
+          "responses": {},
+          "_ref_id": "req_mhja7e80_b5b07649-22bf-476b-b75a-542f82592040"
+        },
+        {
+          "v": "16",
+          "name": "Update Clinic",
+          "method": "PUT",
+          "endpoint": "<<url>>/clinics/<<clinicId>>",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"name\": \"Example Clinic\",\n  \"address\": \"Example Address 123\"\n}"
+          },
+          "requestVariables": [
+            {
+              "key": "clinicId",
+              "value": "1",
+              "active": true
+            }
+          ],
+          "responses": {},
+          "_ref_id": "req_mhj9gln0_6600f7bc-e4e1-480b-9050-20f327303e5d"
+        },
+        {
+          "v": "16",
+          "name": "Delete Clinic",
+          "method": "DELETE",
+          "endpoint": "<<url>>/clinics/<<clinicId>>",
+          "params": [],
+          "headers": [],
+          "preRequestScript": "",
+          "testScript": "",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [
+            {
+              "key": "clinicId",
+              "value": "14",
+              "active": true
+            }
+          ],
+          "responses": {},
+          "_ref_id": "req_mhja03ih_49d5c485-4c7b-40dc-89eb-1398ff03a23b"
+        },
+        {
+          "v": "16",
+          "endpoint": "<<url>>/clinics/<<clinicId>>/doctors",
+          "name": "Assign Doctors To Clinic",
+          "params": [],
+          "headers": [],
+          "method": "PUT",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"doctor_ids\": [1]\n}"
+          },
+          "requestVariables": [
+            {
+              "key": "clinicId",
+              "value": "1",
+              "active": true
+            }
+          ],
+          "responses": {},
+          "_ref_id": "req_mhjc2jq5_5d8beb91-6386-4a44-8b22-8bd6913ab162"
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "variables": [],
+      "_ref_id": "coll_mhj6waj9_b9d83bc7-104c-40cd-881a-bd076ee1c469"
+    },
+    {
+      "v": 10,
+      "name": "Patient Module",
+      "folders": [],
+      "requests": [
+        {
+          "v": "16",
+          "endpoint": "<<url>>/patients",
+          "name": "Get All Patients",
+          "params": [
+            {
+              "key": "page",
+              "value": "1",
+              "active": true,
+              "description": ""
+            }
+          ],
+          "headers": [],
+          "method": "GET",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {},
+          "_ref_id": "req_mhjl8our_86ecb771-c72b-469e-854b-96e0b39a9934"
+        },
+        {
+          "v": "16",
+          "endpoint": "<<url>>/patients/<<patientId>>",
+          "name": "Get Patient By Id",
+          "params": [],
+          "headers": [],
+          "method": "GET",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [
+            {
+              "key": "patientId",
+              "value": "1",
+              "active": true
+            }
+          ],
+          "responses": {},
+          "_ref_id": "req_mhjlgt7e_6ad49068-5127-4dd3-8485-b3c697e7ab40"
+        },
+        {
+          "v": "16",
+          "endpoint": "<<url>>/patients",
+          "name": "Post Patient",
+          "params": [],
+          "headers": [],
+          "method": "POST",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"name\": \"User Patient\",\n  \"email\": \"user@example.com\",\n  \"user_id\": 86\n}"
+          },
+          "requestVariables": [],
+          "responses": {},
+          "_ref_id": "req_mhjlm29l_b4d35e89-4641-41d6-afe6-6d6bae5ccdad"
+        },
+        {
+          "v": "16",
+          "endpoint": "<<url>>/patients/<<patientId>>",
+          "name": "Update Patient",
+          "params": [],
+          "headers": [],
+          "method": "PUT",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"name\": \"Prueba2\",\n  \"email\": \"mernser@osinski.com\"\n}"
+          },
+          "requestVariables": [
+            {
+              "key": "patientId",
+              "value": "2",
+              "active": true
+            }
+          ],
+          "responses": {},
+          "_ref_id": "req_mhjm7ocw_26ca9d50-a7e6-4528-aff4-237bec8dcf04"
+        },
+        {
+          "v": "16",
+          "endpoint": "<<url>>/patients/<<patientId>>",
+          "name": "Delete Patient",
+          "params": [],
+          "headers": [],
+          "method": "DELETE",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [
+            {
+              "key": "patientId",
+              "value": "1",
+              "active": true
+            }
+          ],
+          "responses": {},
+          "_ref_id": "req_mhkjnswd_944dc881-2bd4-4390-a7f1-affc39f3aa55"
+        },
+        {
+          "v": "16",
+          "endpoint": "<<url>>/appointments/me/appointments",
+          "name": "Get Patient Appointments",
+          "params": [],
+          "headers": [],
+          "method": "GET",
+          "auth": {
+            "authType": "bearer",
+            "authActive": true,
+            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNzYyNDM2MjUzLCJleHAiOjE3NjI0Mzk4NTMsIm5iZiI6MTc2MjQzNjI1MywianRpIjoiRk5YWlJwdXpDb0dQcDFBcCIsInN1YiI6Ijg2IiwicHJ2IjoiOGFmOTQ3MjE2MjljMDAyZTZiYTY5YWEzNmYxMjVkNDRiM2UwM2Q1ZCJ9.l3LJ7F6-eJQaqT4dzysdt5jZt2UAMd-8VcXofxnrwEcbjtvRrXMkR_zoX65Kdq8Rob5L16Ya45ECrvcaYvVbuq6Z1-x2oXdzgGt6kvUWOuekiG0N3571vBiNDuJA2aIbYx9nTdHpW7EEn2w8Iwzo9eym8ENKUFBgxUw-mtZUrFrF87l4xBeFFbGvekplHlNo6sjnz42Zexx56DqvjOZUr1MmhvHYT23YgQuL0biZXx-WDim-0yAV971rizqibUWxb4dJ9DHug06pzRmoryiE_JmiAG2MCfwhwAtbzxNs7Z8pfRqC9WAIzued9JpwsY-PGGBXtyWvgmmz_ozKG75EToQzKMS9rbVMXCie04_dWRod1JRAuO2XvV3IUkHkifs0DsHoUjXHjnzniqKYK-Su7P2cousP1bGvRAP-k7PA2veInnu60x6q4eBBBG0AlfBZAtOvySHRXaUt8G8js_5_RDGOtaLEezQNrfvXKamwuiHEMv45yqNhYGg10luZ00nqE03lWgRG5PD96TmFMT5vRkfAmN8yDfVBL0zWUN9YVgW8eco2JE5wlkXcbBq_dxBIXsOLp81Uv40zaH-v_mckVcGuEVC9UJDbe0bNybaySQ5yvWOK-0WkmXqQimQrHNt6bc20O3bGZ3l32qRfpVlgnJoRg7M89xd-yz2pxSaxYbg"
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {},
+          "_ref_id": "req_mhmbeqji_8aa1f71b-f7f5-4a7f-81de-c641b4b3d2af"
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "variables": [],
+      "_ref_id": "coll_mhjl8ih1_d9728801-b98d-46c2-8dc8-3c104f4e9cf3"
+    },
+    {
+      "v": 10,
+      "name": "Appointment Module",
+      "folders": [],
+      "requests": [
+        {
+          "v": "16",
+          "endpoint": "<<url>>/appointments",
+          "name": "Create Appointment",
+          "params": [],
+          "headers": [],
+          "method": "POST",
+          "auth": {
+            "authType": "bearer",
+            "authActive": true,
+            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNzYyNDM2MjUzLCJleHAiOjE3NjI0Mzk4NTMsIm5iZiI6MTc2MjQzNjI1MywianRpIjoiRk5YWlJwdXpDb0dQcDFBcCIsInN1YiI6Ijg2IiwicHJ2IjoiOGFmOTQ3MjE2MjljMDAyZTZiYTY5YWEzNmYxMjVkNDRiM2UwM2Q1ZCJ9.l3LJ7F6-eJQaqT4dzysdt5jZt2UAMd-8VcXofxnrwEcbjtvRrXMkR_zoX65Kdq8Rob5L16Ya45ECrvcaYvVbuq6Z1-x2oXdzgGt6kvUWOuekiG0N3571vBiNDuJA2aIbYx9nTdHpW7EEn2w8Iwzo9eym8ENKUFBgxUw-mtZUrFrF87l4xBeFFbGvekplHlNo6sjnz42Zexx56DqvjOZUr1MmhvHYT23YgQuL0biZXx-WDim-0yAV971rizqibUWxb4dJ9DHug06pzRmoryiE_JmiAG2MCfwhwAtbzxNs7Z8pfRqC9WAIzued9JpwsY-PGGBXtyWvgmmz_ozKG75EToQzKMS9rbVMXCie04_dWRod1JRAuO2XvV3IUkHkifs0DsHoUjXHjnzniqKYK-Su7P2cousP1bGvRAP-k7PA2veInnu60x6q4eBBBG0AlfBZAtOvySHRXaUt8G8js_5_RDGOtaLEezQNrfvXKamwuiHEMv45yqNhYGg10luZ00nqE03lWgRG5PD96TmFMT5vRkfAmN8yDfVBL0zWUN9YVgW8eco2JE5wlkXcbBq_dxBIXsOLp81Uv40zaH-v_mckVcGuEVC9UJDbe0bNybaySQ5yvWOK-0WkmXqQimQrHNt6bc20O3bGZ3l32qRfpVlgnJoRg7M89xd-yz2pxSaxYbg"
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"doctor_id\": 1,\n  \"patient_id\": 51,\n  \"clinic_id\": 1,\n  \"start_date\": \"2025-11-10 12:45:00\",\n  \"end_date\": \"2025-11-10 13:00:00\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {},
+          "_ref_id": "req_mhkrzpfi_806437fe-acd1-4809-9674-e915d8891634"
+        },
+        {
+          "v": "16",
+          "endpoint": "<<url>>/appointments/<<appointmentId>>",
+          "name": "Delete Appointment",
+          "params": [],
+          "headers": [],
+          "method": "DELETE",
+          "auth": {
+            "authType": "bearer",
+            "authActive": true,
+            "token": ""
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [
+            {
+              "key": "appointmentId",
+              "value": "124",
+              "active": true
+            }
+          ],
+          "responses": {},
+          "_ref_id": "req_mhkxx9ao_36bfc184-4b26-4235-b623-d24f64f37427"
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "variables": [],
+      "_ref_id": "coll_mhkrzi6t_d863f026-9ab0-4caf-a3cd-51b9cdc22bd3"
+    },
+    {
+      "v": 10,
+      "name": "Authentication Module",
+      "folders": [],
+      "requests": [
+        {
+          "v": "16",
+          "endpoint": "<<url>>/auth/login",
+          "name": "Login",
+          "params": [],
+          "headers": [],
+          "method": "POST",
+          "auth": {
+            "authType": "inherit",
+            "authActive": true
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": "application/json",
+            "body": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"user123\"\n}"
+          },
+          "requestVariables": [],
+          "responses": {},
+          "_ref_id": "req_mhm3km9r_eb309516-2cd5-4da4-9162-cc79d1373996"
+        },
+        {
+          "v": "16",
+          "endpoint": "<<url>>/auth/refresh",
+          "name": "Refresh Token",
+          "params": [],
+          "headers": [],
+          "method": "POST",
+          "auth": {
+            "authType": "bearer",
+            "authActive": true,
+            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS9hdXRoL3JlZnJlc2giLCJpYXQiOjE3NjIzNjEwMzksImV4cCI6MTc2MjM2NDY0OCwibmJmIjoxNzYyMzYxMDQ4LCJqdGkiOiJmV3B1WW9nNHFIRWNTOTExIiwic3ViIjoiMzYiLCJwcnYiOiI4YWY5NDcyMTYyOWMwMDJlNmJhNjlhYTM2ZjEyNWQ0NGIzZTAzZDVkIn0.SXJYTv0luszmMNPYDOI-mgWDyXYcsAxGuAIzZBOeC6fTHN-9lHGl36ZAZBOrJgSi17wEUF2S8xwRjeBMBQ612gIwbdhQ1Vh4K3Go_1FIT1GLkI80RkexwVSBqWaBRALi2VzW1C1TGm23oVNrbPNVjp3POyFj4PJS8lKPiOFxVj5TDHHUJjJf16IQJd9jq3XNZlGnZhCdCGzREo8f94eAcLX5I7Ly4VBE0b2okSpAZvq7FB9fK6nnOA71cUzXc4Cg1Dy2mMbrBxbXCO5-Edz3EztZ3hg1_yyloAel7cDmIdeiNVVEMFKCyfgJ7MrAGg2tbA3de-fj78RbRQuy78GFmxlX6xCHNdObpDal1oGn-EsSv5KMcjCBPvjSOJ-FR2rE4exFpEmetA_dJSS97O-hBswMT9NE-jlpQZguhjFn9_f_BJlWsRK0x8npOCN8SDNAafSSGipohcxH7Slde-iZIu6V_Haz62-qbNv5LQtc6e1MZq-_i7ox2wsCDarhFSxIzhlyK2drNvHaVveNCcB_vNWG3PvoYDYQ-NpGHcuTHTFeiviLMHjX9537YsZU2I-62OVhVUNLoazxWBxRuyLIYVzlbkYUFanYckmh3NIvkGrs_UGzI_vemAUoEeC11IVsYsHCalimOEhXyjTHdlUAU9YaEEMZDXoan3T5uPCl0z8",
+            "secret": "",
+            "algorithm": "HS256",
+            "payload": "{}",
+            "addTo": "HEADERS",
+            "isSecretBase64Encoded": false,
+            "headerPrefix": "Bearer ",
+            "paramName": "token",
+            "jwtHeaders": "{}"
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {},
+          "_ref_id": "req_mhm4kx9z_e41c3b20-aeb8-4e21-9825-473c2c70bc32"
+        },
+        {
+          "v": "16",
+          "endpoint": "<<url>>/auth/logout",
+          "name": "Logout",
+          "params": [],
+          "headers": [],
+          "method": "POST",
+          "auth": {
+            "authType": "bearer",
+            "authActive": true,
+            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0L2FwaS9hdXRoL2xvZ2luIiwiaWF0IjoxNzYyMzU4MzYxLCJleHAiOjE3NjIzNjE5NjEsIm5iZiI6MTc2MjM1ODM2MSwianRpIjoiWVpEYUI4R0ZrcXVLa25UWiIsInN1YiI6IjM2IiwicHJ2IjoiOGFmOTQ3MjE2MjljMDAyZTZiYTY5YWEzNmYxMjVkNDRiM2UwM2Q1ZCJ9.kQCLjyUnIgVZqwMKCxupE1sJwJhFBqOhlINIw99nRY7oUvSlo7944jIauQ6NfjZzvPFOHocmCOY36xasncBIs6leSoPAvUOF4F0G1kuTT7NHwYfNZ-Ujf00447AVP7UQk0PWpnIYZvEQJPLpeJ1CF_AI6I_H0Dh_HqqlH9-oajsGoZHlC_52P_Z_F6PzjugQ1Epi3pC97ymn6_KBHyoGJNpu4PxtLX3vuvh5UxTPyOF1M6Gq4CANMxnn59Gd7lAMGRk4y82j7lgvHO6PTYTV4D1J8bOC7Er5DdNiIbt2xKU4qSp7C5qwsQSy5F_2H91T23pXytOLXuzF87kcuyH8wOOhxKj-VZfNtwinC_ZyJwlycQlQcY59gocf0AoJPKHwyXqmHEIrumvQw6MOqV2o048_NGKZVeacqMcsEdEJZAH5gIwN8iXfRSqgO1F7hzyA-Gd2rh9PUqsHK20B1fNV7FPkyqiAEZuRv2DlPMzEzWc_ybioFC-Y0eaYslP5BuAFFGzdnO8GoB3K4_CmM8hIYbavkDL5MuUzSgzIKZuVQuNOoSo3d7eu5IK6LeCAhtPvSGDx8vlOB7FKrc2W5TFLlbM6e9jHfA721mRTdYtnc5ustiZ3bwJO6HZ3Qwh8IsT3d7CWemrJ9D-f28nN3kOK65rtPu6MGpeFY5QAMJflFu4"
+          },
+          "preRequestScript": "",
+          "testScript": "",
+          "body": {
+            "contentType": null,
+            "body": null
+          },
+          "requestVariables": [],
+          "responses": {},
+          "_ref_id": "req_mhm4pkgk_de99fef3-4bd2-4f4f-8ed7-1349fc1ca37f"
+        }
+      ],
+      "auth": {
+        "authType": "inherit",
+        "authActive": true
+      },
+      "headers": [],
+      "variables": [],
+      "_ref_id": "coll_mhm3khdt_cac9d7c2-17a5-45e8-9ea1-0cd1f22d79d8"
+    }
+  ],
+  "requests": [],
+  "auth": {
+    "authType": "none",
+    "authActive": true
+  },
+  "headers": [],
+  "variables": [
+    {
+      "key": "url",
+      "initialValue": "http://localhost/api",
+      "currentValue": "",
+      "secret": false
+    },
+    {
+      "key": "doctorId",
+      "initialValue": "18",
+      "currentValue": "",
+      "secret": false
+    }
+  ],
+  "_ref_id": "coll_mhf9xkdf_25395726-6d74-4466-a47d-6f49e0a955e3"
+}

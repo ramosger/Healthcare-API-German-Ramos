@@ -29,6 +29,7 @@ class AppointmentFactory extends Factory
         return [
             'doctor_id' => DoctorFactory::new(),
             'patient_id' => PatientFactory::new(),
+            'user_id' => UserFactory::new(),
             'clinic_id'  => ClinicFactory::new(),
             'start_date' => $start,
             'end_date' => $end,
