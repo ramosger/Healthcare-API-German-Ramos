@@ -27,7 +27,6 @@ class AppointmentResource extends JsonResource
             'doctor' => DoctorResource::make($this->whenLoaded('doctor')),
             'patient_id' => $this->patient_id,
             'patient' => PatientResource::make($this->whenLoaded('patient')),
-            'user_id' => $this->patient_id,
             'user' => UserResource::make($this->whenLoaded('user')),
             'clinic_id' => $this->clinic_id,
             'clinic' => ClinicResource::make($this->whenLoaded('clinic')),
