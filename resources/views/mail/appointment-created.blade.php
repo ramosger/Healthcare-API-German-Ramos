@@ -1,80 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>Appointment Confirmation</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f9f9f9;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            background: #ffffff;
-            border-radius: 8px;
-            padding: 24px;
-            max-width: 600px;
-            margin: 0 auto;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        h1 {
-            color: #2c3e50;
-            font-size: 22px;
-            margin-bottom: 16px;
-        }
-
-        p {
-            line-height: 1.6;
-            margin: 8px 0;
-        }
-
-        .details {
-            background: #f3f4f6;
-            padding: 16px;
-            border-radius: 6px;
-            margin: 16px 0;
-        }
-
-        .details p {
-            margin: 6px 0;
-        }
-
-        .details strong {
-            display: inline-block;
-            width: 130px;
-        }
-
-        .footer {
-            font-size: 12px;
-            color: #888;
-            margin-top: 24px;
-            text-align: center;
-        }
-    </style>
 </head>
 
-<body>
-    <div class="container">
-        <h1>Appointment Confirmed</h1>
+<body style="margin:0;padding:24px;background:whitesmoke;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;color:dimgray;line-height:1.5;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+        <tr>
+            <td align="center">
+                <div style="max-width:600px;width:100%;background:white;border:1px solid lightgray;border-radius:10px;padding:32px;">
 
-        <p>Hello {{ $user->name }},</p>
+                    <h1 style="margin:0 0 20px 0;font-size:24px;line-height:1.3;color:black;font-weight:700;text-align:center;">
+                        Appointment Confirmed
+                    </h1>
 
-        <p>Your appointment has been successfully confirmed. Below are the details:</p>
+                    <p style="margin:8px 0 16px 0;font-size:16px;text-align:center;color:gray;">
+                        Hello {{ $user->name }},
+                    </p>
 
-        <div class="details">
-            <p><strong>Patient:</strong> {{ $patient->name ?? '—' }}</p>
-            <p><strong>Doctor:</strong> {{ $doctor->name ?? '—' }}</p>
-            <p><strong>Clinic:</strong> {{ $clinic->name ?? '—' }}</p>
-            <p><strong>Date:</strong> {{ $startDate ?? '—' }}</p>
-        </div>
+                    <p style="margin:8px 0 24px 0;font-size:15px;text-align:center;color:gray;">
+                        Your appointment has been successfully confirmed. Please find the details below:
+                    </p>
 
-        <p>Thank you</p>
-    </div>
+                    <div style="background:ghostwhite;border:1px solid lightgray;border-radius:8px;padding:16px 20px;margin:24px 0;text-align:left;">
+                        <p style="margin:6px 0;font-size:15px;color:black;">
+                            <strong>Patient:</strong> <span style="color:dimgray;">{{ $patient->name ?? '—' }}</span>
+                        </p>
+                        <p style="margin:6px 0;font-size:15px;color:black;">
+                            <strong>Doctor:</strong> <span style="color:dimgray;">{{ $doctor->name ?? '—' }}</span>
+                        </p>
+                        <p style="margin:6px 0;font-size:15px;color:black;">
+                            <strong>Clinic:</strong> <span style="color:dimgray;">{{ $clinic->name ?? '—' }}</span>
+                        </p>
+                        <p style="margin:6px 0;font-size:15px;color:black;">
+                            <strong>Date:</strong> <span style="color:dimgray;">{{ $startDate ?? '—' }}</span>
+                        </p>
+                    </div>
+
+                    <p style="margin:16px 0 8px 0;text-align:center;font-size:15px;color:gray;">
+                        Thank you
+                    </p>
+
+                    <hr style="border:none;border-top:1px solid lightgray;margin:24px 0;" />
+                </div>
+            </td>
+        </tr>
+    </table>
 </body>
-
 </html>
